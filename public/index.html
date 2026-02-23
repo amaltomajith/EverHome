@@ -3,54 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot API | Amal</title>
+    <title>Chatbot API | Everhome</title>
     <style>
-        body { 
-            font-family: system-ui, -apple-system, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-            background-color: #0f172a; 
-            color: #f8fafc; 
+        body {
+            background-color: #050505;
+            color: #00ff41; /* Classic Matrix Green */
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 2rem;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.4); /* CRT Glow effect */
         }
-        .container { 
-            text-align: center; 
-            padding: 2.5rem; 
-            background: #1e293b; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
-            border: 1px solid #334155;
+
+        /* Scanline effect over the whole screen */
+        body::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
         }
-        h1 { margin-top: 0; margin-bottom: 0.5rem; color: #38bdf8; }
-        p { color: #94a3b8; margin-bottom: 1.5rem; }
-        .status { 
-            display: inline-block; 
-            padding: 0.35rem 1rem; 
-            background: rgba(16, 185, 129, 0.1); 
-            color: #10b981; 
-            border-radius: 9999px; 
-            font-size: 0.875rem; 
-            font-weight: 600;
-            border: 1px solid rgba(16, 185, 129, 0.2); 
+
+        .terminal {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 3;
         }
-        .pulse {
+
+        .line {
+            display: none; /* Hidden until JS reveals them */
+            margin: 0;
+            word-wrap: break-word;
+        }
+
+        .system-info { color: #008f11; }
+        .success { color: #00ff41; font-weight: bold; }
+        .warning { color: #ffb000; }
+        
+        .cursor {
             display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #10b981;
-            border-radius: 50%;
-            margin-right: 6px;
-            box-shadow: 0 0 8px #10b981;
+            width: 10px;
+            height: 1.2rem;
+            background-color: #00ff41;
+            vertical-align: bottom;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Portfolio API</h1>
-        <p>The headless backend powering Amal's AI operations.</p>
-        <div class="status"><span class="pulse"></span> System Online</div>
-    </div>
+    <div class="terminal" id="terminal">
+        </div>
+
+    <script>
+        // The mock boot sequence
+        const bootSequence = [
+            "<span class='system-info'>Admin-OS v2.4.1 (tty1)</span>",
+            "<br>",
+            "login: admin",
+            "password: <span class='system-info'>*********</span>",
+            "Authenticating...",
+            "<span class='success'>[ OK ]</span> Access Granted.",
+            "<br>",
+            "Initializing Portfolio API...",
+            "Loading environment variables... <span class='success'>[ OK ]</span>",
+            "Connecting to MongoDB Atlas...   <span class='success'>[ OK ]</span>",
+            "Establishing Groq AI pipeline... <span class='success'>[ OK ]</span>",
+            "Fetching Knowledge Base...       <span class='success'>[ OK ]</span>",
+            "<br>",
+            "Running headless backend for Everhome AI operations.",
+            "<span class='warning'>Status:</span> SYSTEM ONLINE",
+            "Listening for requests..."
+        ];
+
+        const terminal = document.getElementById('terminal');
+        let currentLine = 0;
+
+        function printLine() {
+            if (currentLine < bootSequence.length) {
+                // Remove the cursor from the previous line if it exists
+                const oldCursor = document.getElementById('cursor');
+                if (oldCursor) oldCursor.remove();
+
+                // Create the new line
+                const lineElement = document.createElement('div');
+                lineElement.className = 'line';
+                lineElement.style.display = 'block';
+                lineElement.innerHTML = bootSequence[currentLine] + (currentLine === bootSequence.length - 1 ? "<span class='cursor' id='cursor'></span>" : "");
+                
+                terminal.appendChild(lineElement);
+                currentLine++;
+
+                // Randomize typing speed for realism (between 50ms and 300ms)
+                const delay = Math.random() * 250 + 50;
+                setTimeout(printLine, delay);
+            }
+        }
+
+        // Start the boot sequence shortly after page load
+        setTimeout(printLine, 500);
+    </script>
 </body>
 </html>

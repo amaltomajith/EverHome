@@ -1,0 +1,4 @@
+name : amaltom_db_user
+pass : 2F1gjGEJ5ieIREIB
+mongodb+srv://amaltom_db_user:2F1gjGEJ5ieIREIB@everhome.otucwcb.mongodb.net/?appName=EverHome
+altpass 5SKv77hiXSLtDKw1
